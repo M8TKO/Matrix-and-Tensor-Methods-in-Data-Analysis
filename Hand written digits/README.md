@@ -30,7 +30,7 @@ For each digit class `k in {0, ..., 9}`, the training samples are arranged into 
 third-order tensor
 
 ```text
-A^(k) in R^(16 x 16 x n_k),
+$A^{(k)} \in \mathbb{R}^{16 x 16 x n_k},$
 ```
 
 where each frontal slice is one image of the digit `k`.
