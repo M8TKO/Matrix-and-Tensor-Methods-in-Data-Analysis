@@ -35,9 +35,7 @@ where each frontal slice is one image of the digit `k`.
 
 The Higher-Order Singular Value Decomposition writes a tensor as
 
-```text
-A = S x_1 U^(1) x_2 U^(2) x_3 U^(3),
-```
+$$A = S x_1 U^(1) x_2 U^(2) x_3 U^(3),$$
 
 where the matrices `U^(1)`, `U^(2)`, and `U^(3)` are orthogonal, and the core
 tensor `S` has mutually orthogonal slices in each mode. This gives a collection of
@@ -46,22 +44,16 @@ orthogonal basis images for each digit class.
 For an unknown digit image `Z`, the classifier projects `Z` onto the approximation
 space associated with each digit and chooses the digit with the smallest residual:
 
-```text
-R(k) = min || Z - sum_i z_i^(k) A_i^(k) ||_F.
-```
+$$R(k) = min || Z - sum_i z_i^(k) A_i^(k) ||_F.$$
 
 Because the basis elements are orthogonal, the coefficients can be computed
 explicitly using Frobenius inner products:
 
-```text
-z_i^(k) = <Z, A_i^(k)>_F / ||A_i^(k)||_F^2.
-```
+$$z_i^(k) = <Z, A_i^(k)>_F / ||A_i^(k)||_F^2.$$
 
 With normalized images and orthonormalized bases, this becomes especially simple:
 
-```text
-R(k)^2 = 1 - sum_i (z_i^(k))^2.
-```
+$$R(k)^2 = 1 - sum_i (z_i^(k))^2.$$
 
 In the experiments, a rank `r = 22` approximation was used for the HOSVD-based
 methods.
@@ -80,35 +72,29 @@ tangent spaces of their transformation manifolds.
 For a pattern `p`, a small transformation can be approximated by the first-order
 Taylor expansion
 
-```text
-s(p, alpha) ~= p + T_p alpha,
-```
+$$s(p, alpha) ~= p + T_p alpha,$$
 
 where the columns of `T_p` are tangent vectors corresponding to allowed
 transformations. For two patterns `p` and `e`, tangential distance is computed by
 the least-squares problem
 
-```text
-min || p + T_p alpha_p - e - T_e alpha_e ||_2.
-```
+$$min || p + T_p alpha_p - e - T_e alpha_e ||_2.$$
 
 Equivalently,
 
-```text
-min || (p - e) - [-T_p  T_e] [alpha_p; alpha_e] ||_2.
-```
+$$min || (p - e) - [-T_p  T_e] [alpha_p; alpha_e] ||_2.$$
 
 The project solves this least-squares problem using QR decomposition and uses the
 residual norm as the distance.
 
 The implemented transformation directions are derived from image derivatives:
 
-```text
-x-translation:  p_x
-y-translation:  p_y
-rotation:       y p_x - x p_y
-scaling:        x p_x + y p_y
-```
+$$\begin{align}
+\text{x-translation:} & \quad p_x \\
+\text{y-translation:} & \quad p_y \\
+\text{rotation:} & \quad y p_x - x p_y \\
+\text{scaling:} & \quad x p_x + y p_y
+\end{align}$$
 
 Gaussian blurring is used as preprocessing so that the originally discrete
 `16 x 16` images can be treated through a smoother differential model.
