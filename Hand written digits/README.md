@@ -29,31 +29,31 @@ sensitivity of tangential distance.
 For each digit class `k in {0, ..., 9}`, the training samples are arranged into a
 third-order tensor
 
-$$A^{(k)} \in \mathbb{R}^{16 x 16 x n_k},$$
+$$A^{{(k)}} \in \mathbb{R}^{16 \times 16 \times n_k},$$
 
 where each frontal slice is one image of the digit `k`.
 
 The Higher-Order Singular Value Decomposition writes a tensor as
 
-$$A = S x_1 U^(1) x_2 U^(2) x_3 U^(3),$$
+$$A = S \times_1 U^{(1)} \times_2 U^{(2)} \times_3 U^{(3)},$$
 
-where the matrices `U^(1)`, `U^(2)`, and `U^(3)` are orthogonal, and the core
+where the matrices $U^{(1)}$, $U^{(2)}$, and $U^{(3)}$ are orthogonal, and the core
 tensor `S` has mutually orthogonal slices in each mode. This gives a collection of
 orthogonal basis images for each digit class.
 
 For an unknown digit image `Z`, the classifier projects `Z` onto the approximation
 space associated with each digit and chooses the digit with the smallest residual:
 
-$$R(k) = min || Z - sum_i z_i^(k) A_i^(k) ||_F.$$
+$$R{(k)} = \min || Z - \sum_i z_i^{(k)} A_i^{(k)} ||_F.$$
 
 Because the basis elements are orthogonal, the coefficients can be computed
 explicitly using Frobenius inner products:
 
-$$z_i^(k) = <Z, A_i^(k)>_F / ||A_i^(k)||_F^2.$$
+$$z_i^{(k)} = \frac{\langle Z, A_i^{{(k)}}\rangle _F}{||A_i^{{(k)}}||_F^2}.$$
 
 With normalized images and orthonormalized bases, this becomes especially simple:
 
-$$R(k)^2 = 1 - sum_i (z_i^(k))^2.$$
+$$R{(k)}^2 = 1 - \sum_i (z_i^{(k)})^2.$$
 
 In the experiments, a rank `r = 22` approximation was used for the HOSVD-based
 methods.
@@ -65,24 +65,24 @@ translated, rotated, scaled, or thickened may represent the same handwritten
 symbol, while Euclidean distance may treat it as substantially different.
 
 Tangential distance addresses this by viewing a digit image as a point in
-`R^256`, and small transformations of that image as curves or surfaces through
+$R^{256}$, and small transformations of that image as curves or surfaces through
 that point. Instead of comparing two points directly, the method compares the
 tangent spaces of their transformation manifolds.
 
 For a pattern `p`, a small transformation can be approximated by the first-order
 Taylor expansion
 
-$$s(p, alpha) ~= p + T_p alpha,$$
+$$s(p, \alpha) ~= p + T_p \alpha,$$
 
 where the columns of `T_p` are tangent vectors corresponding to allowed
 transformations. For two patterns `p` and `e`, tangential distance is computed by
 the least-squares problem
 
-$$min || p + T_p alpha_p - e - T_e alpha_e ||_2.$$
+$$\min || p + T_p \alpha_p - e - T_e \alpha_e ||_2.$$
 
 Equivalently,
 
-$$min || (p - e) - [-T_p  T_e] [alpha_p; alpha_e] ||_2.$$
+$$\min || (p - e) - \left[T_e - T_e\right] [\alpha_p; \alpha_e] ||_2.$$
 
 The project solves this least-squares problem using QR decomposition and uses the
 residual norm as the distance.
