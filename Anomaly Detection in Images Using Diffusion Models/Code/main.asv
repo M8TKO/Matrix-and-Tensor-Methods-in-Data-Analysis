@@ -1,0 +1,33 @@
+
+I = im2double(imread('anomaly.png'));
+  % Or load your own grayscale image
+
+% Parameters
+L = 2;
+patch_sizes = [7, 5, 3];        % Level 0, 1, 2
+window_sizes = [30, 20, 10];                
+mask_half = 10;                  % 3x3 center mask
+sample_percents = [0.15, 0.3, 0.5];  % [level 0, 1, 2]
+
+
+% Run detector
+score_map = multiscale_anomaly_detector(I, L, patch_sizes, window_sizes, mask_half, sample_percents);
+
+% Display result
+figure;
+imagesc(score_map); colormap hot; colorbar;
+title('Anomaly Score Map');
+
+% Show top 5% anomalies over image
+threshold = prctile(score_map(:), 95);
+[row, col] = find(score_map > threshold);
+figure;
+imshow(I, []); hold on;
+plot(col, row, 'r.', 'MarkerSize', 8);
+title('Top 5% Anomalies');
+
+fprintf("Anomaly Score — min: %.3f, max: %.3f, mean: %.3f\n", ...
+    min(score_map(:)), max(score_map(:)), mean(score_map(:)));
+
+threshold = prctile(score_map(:), 95);
+binary_map = score_map > threshold;
