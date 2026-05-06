@@ -96,7 +96,7 @@ is moved across the spatial dimensions of the input, producing a feature map.
 The report also describes activation functions, especially ReLU,
 
 $$
-\text{ReLU}(x) = \max\{0, x\},
+\text{ReLU}(x) = \max\{ \{ 0, x \} \},
 $$
 
 and explains why ReLU is often preferred over sigmoid activations in deep
